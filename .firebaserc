@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "emergency-disease-surveillance"
+  },
+  "targets": {
+    "emergency-disease-surveillance": {
+      "hosting": {
+        "emergency-disease-serveliance": [
+          "emergency-disease-surveillance"
+        ]
+      }
+    }
   }
 }
