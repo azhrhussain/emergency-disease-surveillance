@@ -11,9 +11,10 @@ import {
 import {
   getSumAndMergeData,
   getTotalSum,
-  objectOfData,
   sumOfQuestion,
 } from '../utils/normilize';
+import { TEST_DATA } from '../utils/testData';
+import { getDatabase } from 'firebase/database';
 
 @Component({
   selector: 'app-questionnaire',
@@ -47,6 +48,7 @@ export class QuestionnaireComponent implements OnInit {
     ];
   date: any = new Date().getDate();
   today: string = new Date().toLocaleDateString('en-ZA');
+  // selectedDate: string;
 
   hypothisis: any = {
     submittedBy: this.selectedUser,
@@ -128,22 +130,34 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   handleShowTodayData() {
-    const startCountRef = ref(this.database, '/questionnaire/2022/09/26');
+    //api endpoint
+    const urlParams = '/questionnaire/' + this.hypothisis.reportingDate;
+    const startCountRef = ref(this.database, urlParams);
+    console.log('urlParams:', urlParams);
     onValue(startCountRef, (snapshot) => {
       const data = snapshot.val();
-      console.log('data', data);
+      console.log('receidved data:', data);
+      // const data = TEST_DATA;
       if (data) {
-        // const sumAndMergeData = getSumAndMergeData(data);
-
-        this.questions = getSumAndMergeData(data);
+        const { questionsData, rapidAntigenTestData } =
+          getSumAndMergeData(data);
+        this.questions = questionsData;
         this.questionSumData = getTotalSum(this.questions);
+        this.rapidAntigenTest = rapidAntigenTestData;
+      } else {
+        alert(
+          'Sorry!! No data entries found for ' +
+            this.hypothisis.reportingDate +
+            '\n\nFor more info please contact Adminstrator.'
+        );
       }
     });
   }
   handleSave() {
     const payload = {
       reportedBy: this.selectedUser,
-      reportingDate: this.hypothisis.reportingDate,
+      reportingDate: new Date().toLocaleString(),
+      // reportingDate: this.hypothisis.reportingDate,
       data: {
         hypothisis: this.hypothisis,
         rapidAntigenTest: this.rapidAntigenTest,
@@ -155,7 +169,7 @@ export class QuestionnaireComponent implements OnInit {
     // this.http
     //   .post(this.url, payload)
     //   .subscribe((response) => console.log('response:', response));
-
+    const db = getDatabase();
     set(
       ref(
         this.database,
@@ -163,8 +177,14 @@ export class QuestionnaireComponent implements OnInit {
           `${this.hypothisis.reportingDate}/${this.hypothisis.submittedBy}`
       ),
       payload
-    );
-
+    ).then(() => {
+        // Data saved successfully!
+        alert('Data Submitted Successfuly...!\n\nHave a good day! :)')
+      })
+      .catch((error) => {
+        // The write failed...
+        alert('Something went wrong.\n\nCheck your internet connection or contact with administrator.')
+      });
     // console.log('hypothisis:', this.hypothisis, this.today);
     // console.log('rapidAntigenTests:', this.rapidAntigenTest);
   }
