@@ -372,7 +372,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 14,
+    qId: 13,
     q: 'Suspected Hemorrhagic Fever/CCHF',
     case: {
       lessThen5: {
@@ -396,7 +396,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 15,
+    qId: 14,
     q: 'Unexplained Fever > 38.5˚C (PUO)',
     case: {
       lessThen5: {
@@ -420,7 +420,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 16,
+    qId: 15,
     q: 'Skin Disease/Scabies',
     case: {
       lessThen5: {
@@ -444,7 +444,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 17,
+    qId: 16,
     q: 'Cutaneous Leishmaniasis',
     case: {
       lessThen5: {
@@ -468,7 +468,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 18,
+    qId: 17,
     q: 'Acute Malnutrition',
     case: {
       lessThen5: {
@@ -492,7 +492,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 19,
+    qId: 18,
     q: 'Eye Infection',
     case: {
       lessThen5: {
@@ -516,7 +516,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 20,
+    qId: 19,
     q: 'Impetigo',
     case: {
       lessThen5: {
@@ -540,7 +540,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 21,
+    qId: 20,
     q: 'Dog Bite/Snake Bite',
     case: {
       lessThen5: {
@@ -564,7 +564,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 22,
+    qId: 21,
     q: 'Others',
     case: {
       lessThen5: {
