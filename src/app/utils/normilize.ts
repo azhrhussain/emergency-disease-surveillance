@@ -27,7 +27,6 @@ export const sumOfQuestion = (
 };
 
 const sumQuestionObjectsByKey = (...objs: any[]) => {
-  // console.log('obj touple:',...objs);
   return Object.values(
     objs.reduce((a: any, e: any) => {
       a[e.qId] = a[e.qId] || {
@@ -78,10 +77,33 @@ const sumrRapidAntigenTestObjectsByKey = (...rapidAntigenTest: any[]) => {
     }, {})
   );
 };
+const sumHypothisisObjectsByKey = (...hypothisisData: any[]) => {
+  return Object.values(
+    hypothisisData.reduce((a, e) => {
+      a[e.id] = a[e.id] || {
+        reportingDate: e.reportingDate,
+        province: e.province,
+        submittedBy: e.submittedBy,
+      };
 
+      for (const k in e) {
+        if (k !== 'reportingDate' && k !== 'province' && k !== 'submittedBy') {
+          if (k === 'catchmentPopulation') {
+            a[e.id][k] = a[e.id][k]
+              ? Number(a[e.id][k]) + Number(e[k])
+              : Number(e[k]);
+          } else {
+            a[e.id][k] = a[e.id][k] ? `${a[e.id][k]} , ${e[k]}` : e[k];
+          }
+        }
+      }
+      return a;
+    }, {})
+  );
+};
 
 const normalizeSumObjectsByKey = (objs: any) => {
-  let qdata: any;
+  let hypothisisData: any = [];
   let rapidAntigenTestData: any = [];
   let questionData: any = [];
   let mataSumData: any = [];
@@ -93,18 +115,37 @@ const normalizeSumObjectsByKey = (objs: any) => {
     // ...objs['DrAliRahman']?.data.queestionsData,
     // ...objs['DrSaidAlamKhan']?.data.queestionsData
     // qdata = sumQuestionObjectsByKey(...objs[key].data.queestionsData);
-    questionData.push(...objs[key].data.queestionsData)
+    hypothisisData.push(objs[key].data.hypothisis);
+    questionData.push(...objs[key].data.queestionsData);
     rapidAntigenTestData.push(...objs[key].data.rapidAntigenTest);
     mataSumData.push({
       reportedBy: objs[key].reportedBy,
       reportingDate: objs[key].reportingDate,
     });
   }
-  
 
+  const removeDuplicates = (data: any) => {
+    const payload = data[0];
+    let payloadObj = {...payload}
+    for (let key in payload) {
+      if (
+        key !== 'reportingDate' &&
+        key !== 'province' &&
+        key !== 'submittedBy' &&
+        key !== 'catchmentPopulation'
+      ) {
+        const arr = payload[key].split(',');
+        const finalVal = Array.from(new Set(arr.map((i: string) => i.trim()))).toLocaleString();
+        payloadObj[key]=finalVal;
+      }
+    }
+    return payloadObj;
+  };
+  const hypothisisNormalize = removeDuplicates(sumHypothisisObjectsByKey(...hypothisisData));
   //normalize data retrun
   return {
     mataSumData,
+    hypothisisData: hypothisisNormalize,
     questionsData: sumQuestionObjectsByKey(...questionData),
     rapidAntigenTestData: sumrRapidAntigenTestObjectsByKey(
       ...rapidAntigenTestData

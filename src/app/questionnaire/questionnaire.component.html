@@ -366,6 +366,7 @@
         type="button"
         class="btn btn-success mr-1"
         (click)="handleSave()"
+        *ngIf="selectedUser !== 'DrShahid007'"
       >
         Save Data
       </button>
@@ -373,6 +374,7 @@
         type="button"
         class="btn btn-primary"
         (click)="handleShowTodayData()"
+        *ngIf="selectedUser === 'DrShahid007'"
       >
         Show All Today's Data
       </button>
