@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Database, set, onValue, ref, update } from '@angular/fire/database';
+import {
+  Database,
+  set,
+  onValue,
+  ref,
+  child,
+  get,
+} from '@angular/fire/database';
 
 import {
   PROVINCES,
@@ -54,16 +61,16 @@ export class QuestionnaireComponent implements OnInit {
     submittedBy: this.selectedUser,
     reportingDate: this.today,
     province: this.selectedprovince,
-    districts: 'lahore dist',
-    tehsil: 'liaquatpur teh',
-    uc: '86,56,566c uc',
-    healthFacilityName: 'Killa abdulih Name',
-    healthFacilityType: 'Killa abdulih Type',
-    healthFacilityCode: '20221 code',
-    healthFacilityCamp: 'Musa zai camp',
-    phoneNumber: '03458033800',
-    organizationName: 'WHO',
-    catchmentPopulation: 2555,
+    districts: '',
+    tehsil: '',
+    uc: '',
+    healthFacilityName: '',
+    healthFacilityType: '',
+    healthFacilityCode: '',
+    healthFacilityCamp: '',
+    phoneNumber: '',
+    organizationName: '',
+    catchmentPopulation: 0,
   };
 
   questionSumData: { [key: string]: any } = getTotalSum(this.questions);
@@ -76,13 +83,6 @@ export class QuestionnaireComponent implements OnInit {
       gender
     );
   }
-  //(ngModelChange)="onRapidAntigenTest($event, testData['id'],'positive')"
-  // onRapidAntigenTest(val: string, currentElm:number, type: string) {
-  //   // const upadedObj = this.rapidAntigenTest.map((item)=>item);
-  //   console.log(val, type, currentElm, this.rapidAntigenTest);
-
-  //   // this.rapidAntigenTest[type] =
-  // }
 
   // (focus)="onFocusInput($event)"
   // onFocusInput($event: any, qID: any, type: string, campare: any, gender: any) {
@@ -115,43 +115,67 @@ export class QuestionnaireComponent implements OnInit {
 
   url: string =
     'https://emergency-disease-surveillance-default-rtdb.asia-southeast1.firebasedatabase.app/questionnaire.json';
-  obj1 = {};
 
-  onCreatePost(postData: any) {
-    // Send Http request
-    console.log('submitPost:', postData);
-    this.http
-      .post(this.url, postData)
-      .subscribe((response) => console.log('response:', response));
-  }
-
-  handleClick() {
-    alert('clicked!');
-  }
+  // onCreatePost(postData: any) {
+  //   // Send Http request
+  //   console.log('submitPost:', postData);
+  //   this.http
+  //     .post(this.url, postData)
+  //     .subscribe((response) => console.log('response:', response));
+  // }
 
   handleShowTodayData() {
     //api endpoint
-    const urlParams = '/questionnaire/' + this.hypothisis.reportingDate;
-    const startCountRef = ref(this.database, urlParams);
-    console.log('urlParams:', urlParams);
-    onValue(startCountRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log('receidved data:', data);
-      // const data = TEST_DATA;
-      if (data) {
-        const { questionsData, rapidAntigenTestData } =
-          getSumAndMergeData(data);
-        this.questions = questionsData;
-        this.questionSumData = getTotalSum(this.questions);
-        this.rapidAntigenTest = rapidAntigenTestData;
-      } else {
-        alert(
-          'Sorry!! No data entries found for ' +
-            this.hypothisis.reportingDate +
-            '\n\nFor more info please contact Adminstrator.'
-        );
-      }
-    });
+    console.log('snapToData........');
+    // const urlParams = '/questionnaire/' + this.hypothisis.reportingDate;
+    const dbRef = ref(getDatabase());
+    get(child(dbRef, `questionnaire/${this.hypothisis.reportingDate}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          console.log('receidved data aalll--->:', data);
+          // const data = TEST_DATA;
+          if (data) {
+            const { hypothisisData, questionsData, rapidAntigenTestData } =
+              getSumAndMergeData(data);
+            this.hypothisis = hypothisisData;
+            this.questions = questionsData;
+            this.questionSumData = getTotalSum(this.questions);
+            this.rapidAntigenTest = rapidAntigenTestData;
+          }
+        } else {
+          alert(
+            'Sorry! No data available ' +
+              this.hypothisis.reportingDate +
+              '\n\nFor more info please contact Adminstrator.'
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // const urlParams = '/questionnaire/' + this.hypothisis.reportingDate;
+    // const startCountRef = ref(this.database, urlParams);
+    // onValue(startCountRef, (snapshot) => {
+    //   const data = snapshot.val();
+    //   console.log('receidved data:', data);
+    //   // const data = TEST_DATA;
+    //   if (data) {
+    //     const { hypothisisData, questionsData, rapidAntigenTestData } =
+    //       getSumAndMergeData(data);
+    //     this.hypothisis = hypothisisData;
+    //     this.questions = questionsData;
+    //     this.questionSumData = getTotalSum(this.questions);
+    //     this.rapidAntigenTest = rapidAntigenTestData;
+    //   } else {
+    //     alert(
+    //       'Sorry!! No data entries found for ' +
+    //         this.hypothisis.reportingDate +
+    //         '\n\nFor more info please contact Adminstrator.'
+    //     );
+    //   }
+    // });
   }
   handleSave() {
     const payload = {
@@ -177,18 +201,17 @@ export class QuestionnaireComponent implements OnInit {
           `${this.hypothisis.reportingDate}/${this.hypothisis.submittedBy}`
       ),
       payload
-    ).then(() => {
+    )
+      .then(() => {
         // Data saved successfully!
-        alert('Data Submitted Successfuly...!\n\nHave a good day! :)')
+        alert('Data Submitted Successfuly...!\n\nHave a good day! :)');
       })
       .catch((error) => {
         // The write failed...
-        alert('Something went wrong.\n\nCheck your internet connection or contact with administrator.')
+        alert(
+          'Something went wrong.\n\nCheck your internet connection or contact with administrator.'
+        );
       });
-    // console.log('hypothisis:', this.hypothisis, this.today);
-    // console.log('rapidAntigenTests:', this.rapidAntigenTest);
   }
-
-  id: number = 5;
   ngOnInit(): void {}
 }
