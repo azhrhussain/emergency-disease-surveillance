@@ -1,1 +1,77 @@
-<app-questionnaire></app-questionnaire>
+<!-- <header>
+  <mat-toolbar>
+    <button
+      mat-icon-button
+      class="example-icon"
+      aria-label="Example icon-button with menu icon"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>My App</span>
+    <span class="example-spacer"></span>
+    <button
+      mat-icon-button
+      class="example-icon favorite-icon"
+      aria-label="Example icon-button with heart icon"
+    >
+      <mat-icon>favorite</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="example-icon"
+      aria-label="Example icon-button with share icon"
+    >
+      <mat-icon>share</mat-icon>
+    </button>
+  </mat-toolbar>
+</header> -->
+
+<header *ngIf="checkLogin()" class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" routerLink>EDSS</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            
+            <li class="nav-item active">
+              <a class="nav-link" routerLink="">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="reports/add">Add New</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="reports/edit">Edit</a>
+            </li>
+            <li *ngIf="isAdmin" class="nav-item">
+              <a class="nav-link" routerLink="reports">View Reports</a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" routerLink="login">Login</a>
+            </li> -->
+          </ul>
+        </div>
+        
+          <div>
+
+            <a class="btn btn-danger text-white" (click)="logout()">Logout</a>
+          </div>
+      </nav>
+      
+    </div>
+  </div>
+</header>
+<main>
+    <router-outlet></router-outlet>
+</main>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   Database,
@@ -30,6 +30,7 @@ import { getDatabase } from 'firebase/database';
 })
 export class QuestionnaireComponent implements OnInit {
   constructor(private http: HttpClient, public database: Database) {}
+  @Output() onSelectedData = new EventEmitter<any>();
 
   isEditable: boolean = false;
 
@@ -48,7 +49,8 @@ export class QuestionnaireComponent implements OnInit {
   selectedprovince = this.provinces[0];
 
   params: any = new URLSearchParams(window.location.search.slice(1));
-  userid: string = this.params.get('userid');
+  // userid: string = this.params.get('userid');
+  userid: any = localStorage.getItem('userid')?.split('@')[0];
   selectedUser =
     this.users[
       this.users.map((name) => name.toLowerCase()).indexOf(this.userid)
@@ -123,7 +125,7 @@ export class QuestionnaireComponent implements OnInit {
   //     .post(this.url, postData)
   //     .subscribe((response) => console.log('response:', response));
   // }
-
+  todaysRawData: any;
   handleShowTodayData() {
     //api endpoint
     console.log('snapToData........');
@@ -136,12 +138,23 @@ export class QuestionnaireComponent implements OnInit {
           console.log('receidved data aalll--->:', data);
           // const data = TEST_DATA;
           if (data) {
-            const { hypothisisData, questionsData, rapidAntigenTestData } =
-              getSumAndMergeData(data);
-            this.hypothisis = hypothisisData;
-            this.questions = questionsData;
+            this.todaysRawData = data;
+            if (
+              this.userid === 'admin' ||
+              this.userid === 'muhammadshahid.15.pk'
+            ) {
+              const { hypothisisData, questionsData, rapidAntigenTestData } =
+                getSumAndMergeData(data);
+              this.hypothisis = hypothisisData;
+              this.questions = questionsData;
+              this.rapidAntigenTest = rapidAntigenTestData;
+            } else {
+              const { hypothisis, queestionsData, rapidAntigenTest } = data[this.selectedUser].data;
+              this.hypothisis = hypothisis;
+              this.questions = queestionsData;
+              this.rapidAntigenTest = rapidAntigenTest;
+            }
             this.questionSumData = getTotalSum(this.questions);
-            this.rapidAntigenTest = rapidAntigenTestData;
           }
         } else {
           alert(
@@ -177,6 +190,17 @@ export class QuestionnaireComponent implements OnInit {
     //   }
     // });
   }
+  selectedUserData: any;
+  // onSelectedUserSave() {
+  //   this.selectedProduct = product;
+  // }
+  onSelectedUserData() {
+    this.handleShowTodayData();
+    console.log('todaysRawData-------->', this.todaysRawData);
+    this.selectedUserData = this.todaysRawData;
+    this.onSelectedData.emit(this.todaysRawData);
+  }
+
   handleSave() {
     const payload = {
       reportedBy: this.selectedUser,
@@ -213,5 +237,8 @@ export class QuestionnaireComponent implements OnInit {
         );
       });
   }
-  ngOnInit(): void {}
+
+  ngOnInit(): void {
+    //console.log('submittedByAzhar------>',submittedByAzhar)
+  }
 }
