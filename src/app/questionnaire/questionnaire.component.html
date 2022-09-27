@@ -1,58 +1,18 @@
-<!-- <h2>Questionnaire list:</h2>
-
-<form #postForm="ngForm" (ngSubmit)="onCreatePost(postForm.value)">
-  <div class="formcontainer">
-    <label><b>Title</b></label>
-    <input type="number" class="titleinput" name="title" ngModel required />
-    <label><b>Content</b></label>
-    <textarea
-      id="content"
-      class="contenttextarea"
-      name="content"
-      ngModel
-      required
-    ></textarea>
-    <button type="submit" class="postbutton">Send Post</button>
-  </div>
-  <div>
-    <div>
-      <button class="fetchbutton">Fetch Posts</button> |
-      <button class="clearbutton">Clear Posts</button>
-    </div>
-  </div>
-</form>
-
-<button (click)="onCreatePost({ id: 4, name: 'azhar' })">submit data</button>
-
-<form class="example-form">
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Favorite food</mat-label>
-    <input matInput placeholder="Ex. Pizza" value="Sushi" />
-  </mat-form-field>
-
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Leave a comment</mat-label>
-    <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
-  </mat-form-field>
-</form> -->
-
-<main ngClass="questionnaire-main">
+<section ngClass="questionnaire-main">
   <div ngClass="container">
-    <header class="text-center">
+    <!-- <header class="text-center">
       <h2 class="h2">Pakistan Flood Response 2022</h2>
       <h2 class="h2">
         Emergency Disease Surveillance System (EDSS) Reporting Form
       </h2>
       <h2 class="h2">Health Facility Level/Medical & Health Camp</h2>
-    </header>
+    </header>-->
     <div class="spacer1"></div>
-    <div class="spacer1"></div>
-
-    
+    <div class="spacer1"></div> 
 
     <mat-grid-list class="col-space-reset" rowHeight="80px" cols="4">
       <mat-grid-tile ngClass="col-space-reset">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Submitted by</mat-label>
           <mat-select [(value)]="hypothisis.submittedBy" [disabled]="true">
             <mat-option *ngFor="let user of users" [value]="user">
@@ -62,7 +22,7 @@
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Reporting Date</mat-label>
           <input
             matInput
@@ -73,7 +33,7 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Province</mat-label>
           <mat-select [(value)]="hypothisis.province" [disabled]="true">
             <mat-option *ngFor="let province of provinces" [value]="province">
@@ -83,97 +43,134 @@
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>District</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. Dera Ismail Khan"
             [(ngModel)]="hypothisis.districts"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
+      
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Tehsil/Taluka</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. Daraban"
             [(ngModel)]="hypothisis.tehsil"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>UC/Village/settlement</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. Uc Musa Zai"
             [(ngModel)]="hypothisis.uc"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Health Facility Name</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. BHU Musa zai"
             [(ngModel)]="hypothisis.healthFacilityName"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Health Facility Type</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. BHU"
             [(ngModel)]="hypothisis.healthFacilityType"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Health Facility Code</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. 12345"
             [(ngModel)]="hypothisis.healthFacilityCode"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Medical/Health Camp</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. BHU Musa Zai"
             [(ngModel)]="hypothisis.healthFacilityCamp"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Contact number</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. 0345 1234123"
             [(ngModel)]="hypothisis.phoneNumber"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Organization name</mat-label>
-          <input
+          <textarea
             matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
             placeholder="Ex. Organization"
             [(ngModel)]="hypothisis.organizationName"
-          />
+          ></textarea>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Catchment Population</mat-label>
           <input
             matInput
@@ -184,8 +181,9 @@
       </mat-grid-tile>
     </mat-grid-list>
   </div>
-</main>
-<div class="spacer1"></div>  <div class="spacer1"></div>
+</section>
+<div class="spacer1"></div>
+<div class="spacer1"></div>
 <div class="container">
   <div class="row">
     <div class="col-12">
@@ -204,11 +202,10 @@
           </tr>
 
           <tr class="text-center">
-            <th colspan="2">Less then 5 years</th>
-            <th colspan="2">Greater then 5 years</th>
-
-            <th colspan="2">Less then 5 years</th>
-            <th colspan="2">Greater then 5 years</th>
+            <th colspan="2">&lt; 5 years</th>
+            <th colspan="2">&ge; 5 years</th>
+            <th colspan="2">&lt; 5 years</th>
+            <th colspan="2">&ge; 5 years</th>
           </tr>
 
           <tr class="text-center">
@@ -366,7 +363,7 @@
         type="button"
         class="btn btn-success mr-1"
         (click)="handleSave()"
-        *ngIf="selectedUser !== 'DrShahid007'"
+        *ngIf="userid !== 'admin' && userid !== 'muhammadshahid.15.pk'"
       >
         Save Data
       </button>
@@ -374,7 +371,7 @@
         type="button"
         class="btn btn-primary"
         (click)="handleShowTodayData()"
-        *ngIf="selectedUser === 'DrShahid007'"
+        *ngIf="userid === 'admin' || userid === 'muhammadshahid.15.pk'"
       >
         Show All Today's Data
       </button>

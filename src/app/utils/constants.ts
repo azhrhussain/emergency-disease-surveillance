@@ -5,7 +5,13 @@ export const USERS = [
   'DrAliRahman',
   'DrSaidAlamKhan',
 ];
-
+export const USERS_EMAIL=[
+  'muhammadshahid.15.pk@gmail.com',
+  'drnouman@edss.com',
+  'drmuneeb@edss.com',
+  'dralirahman@edss.com',
+  'drsaidalamkhan@edss.com'
+]
 export const PROVINCES = ['Khyber Pakhtunkhwa'];
 
 export const RAPID_ANTIGEN_TESTS_CONDUCTED = [
