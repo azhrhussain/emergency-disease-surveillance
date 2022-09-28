@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 import {
   Database,
   set,
@@ -22,6 +24,7 @@ import {
 } from '../utils/normilize';
 import { TEST_DATA } from '../utils/testData';
 import { getDatabase } from 'firebase/database';
+import { ConfirmSaveRepoertDialogComponent } from '../confirm-save-repoert-dialog/confirm-save-repoert-dialog.component';
 
 @Component({
   selector: 'app-questionnaire',
@@ -29,12 +32,35 @@ import { getDatabase } from 'firebase/database';
   styleUrls: ['./questionnaire.component.scss'],
 })
 export class QuestionnaireComponent implements OnInit {
-  constructor(private http: HttpClient, public database: Database) {}
+  constructor(
+    private http: HttpClient,
+    public database: Database,
+    public dialog: MatDialog
+  ) {}
   @Output() onSelectedData = new EventEmitter<any>();
 
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    let dialogConfirmSubmitRef = this.dialog.open(ConfirmSaveRepoertDialogComponent, {
+      width: '500px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+    const sub = dialogConfirmSubmitRef.componentInstance.submitData.subscribe(() => {
+      // do something
+      this.handleSave();
+      console.log('Opned subscribe, submitData',this)
+    });
+    dialogConfirmSubmitRef.afterClosed().subscribe(() => {
+      // unsubscribe onAdd
+      console.log('submitData unsub: close:', sub)
+    });
+  }
+
+
+  
   isEditable: boolean = false;
 
-  users: Array<string> = USERS;
+  users: Array<{}> = USERS;
   provinces: Array<string> = PROVINCES;
   questionsTitle = QUESTIONS;
 
@@ -51,13 +77,19 @@ export class QuestionnaireComponent implements OnInit {
   params: any = new URLSearchParams(window.location.search.slice(1));
   // userid: string = this.params.get('userid');
   userid: any = localStorage.getItem('userid')?.split('@')[0];
-  selectedUser =
-    this.users[
-      this.users.map((name) => name.toLowerCase()).indexOf(this.userid)
-    ];
+
+  selectedUser = this.users
+    .map((u) => {
+      if (u['id'].toLowerCase() === this.userid) {
+        return u['id'];
+      }
+    })
+    .join('');
+
+  isAdmin: boolean =
+    this.userid === 'admin' || this.userid === 'muhammadshahid.15.pk';
   date: any = new Date().getDate();
   today: string = new Date().toLocaleDateString('en-ZA');
-  // selectedDate: string;
 
   hypothisis: any = {
     submittedBy: this.selectedUser,
@@ -139,20 +171,28 @@ export class QuestionnaireComponent implements OnInit {
           // const data = TEST_DATA;
           if (data) {
             this.todaysRawData = data;
-            if (
-              this.userid === 'admin' ||
-              this.userid === 'muhammadshahid.15.pk'
-            ) {
+            if (this.hypothisis.submittedBy.toLocaleLowerCase() === 'admin') {
+              console.log('inside if::', this.selectedUser, this.userid);
               const { hypothisisData, questionsData, rapidAntigenTestData } =
                 getSumAndMergeData(data);
               this.hypothisis = hypothisisData;
               this.questions = questionsData;
               this.rapidAntigenTest = rapidAntigenTestData;
+              this.hypothisis.submittedBy = this.selectedUser;
             } else {
-              const { hypothisis, queestionsData, rapidAntigenTest } = data[this.selectedUser].data;
-              this.hypothisis = hypothisis;
-              this.questions = queestionsData;
-              this.rapidAntigenTest = rapidAntigenTest;
+              const user =
+                this.selectedUser === this.hypothisis.submittedBy
+                  ? this.selectedUser
+                  : this.hypothisis.submittedBy;
+              if (data[user]) {
+                const { hypothisis, queestionsData, rapidAntigenTest } =
+                  data[user].data;
+                this.hypothisis = hypothisis;
+                this.questions = queestionsData;
+                this.rapidAntigenTest = rapidAntigenTest;
+              } else {
+                alert('Opps!!! No record found for selected user.');
+              }
             }
             this.questionSumData = getTotalSum(this.questions);
           }

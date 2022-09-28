@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'login',
   },
   {
+    component: LoginComponent,
+    path: '',
+  },
+  {
     path: 'reports/add',
     component: AddDataComponent,
     // children: [
@@ -25,7 +29,7 @@ const routes: Routes = [
   },
   {
     component: DashboardComponent,
-    path: '',
+    path: 'dashboard',
   },
 ];
 

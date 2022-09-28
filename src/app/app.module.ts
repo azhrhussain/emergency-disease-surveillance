@@ -10,6 +10,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { AppRoutingModule } from './app-routing.module';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { AngularFireModule } from '@angular/fire/compat';
 
 
@@ -24,6 +25,8 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { ConfirmSaveRepoertDialogComponent } from './confirm-save-repoert-dialog/confirm-save-repoert-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
     AddDataComponent,
     LoginComponent,
     QuestionnaireComponent,
+    ConfirmSaveRepoertDialogComponent,
 
   ],
   imports: [
@@ -47,6 +51,8 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
     MatInputModule,
     MatSelectModule,
     MatGridListModule,
+    MatDialogModule,
+    MatButtonModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
