@@ -4,7 +4,7 @@
   },
   "hosting": [
     {
-      "public": "dist/emergency-disease-serveliance",
+      "public": "./dist/emergency-disease-serveliance",
       "ignore": [
         "firebase.json",
         "**/.*",

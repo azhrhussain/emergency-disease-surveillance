@@ -9,14 +9,13 @@
     </header>-->
     <div class="spacer1"></div>
     <div class="spacer1"></div> 
-
     <mat-grid-list class="col-space-reset" rowHeight="80px" cols="4">
       <mat-grid-tile ngClass="col-space-reset">
         <mat-form-field appearance="fill">
-          <mat-label>Submitted by</mat-label>
-          <mat-select [(value)]="hypothisis.submittedBy" [disabled]="true">
-            <mat-option *ngFor="let user of users" [value]="user">
-              {{ user }}
+          <mat-label>Submitted by </mat-label>
+          <mat-select [(value)]="hypothisis.submittedBy" [disabled]="!isAdmin">
+            <mat-option *ngFor="let user of users" [value]="user['id']">
+              {{ user['viewValue'] }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -327,7 +326,7 @@
         </tfoot>
       </table>
     </div>
-    <div class="col-12 col-lg-4">
+    <div class="col-12 col-lg-6">
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
@@ -358,25 +357,10 @@
       </table>
     </div>
 
-    <div class="col-12 col-lg-4 m-auto text-right">
-      <button
-        type="button"
-        class="btn btn-success mr-1"
-        (click)="handleSave()"
-        *ngIf="userid !== 'admin' && userid !== 'muhammadshahid.15.pk'"
-      >
-        Save Data
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="handleShowTodayData()"
-        *ngIf="userid === 'admin' || userid === 'muhammadshahid.15.pk'"
-      >
-        Show All Today's Data
-      </button>
-      <div class="spacer1"></div>
-      <div class="spacer1"></div>
+    <div class="col-12 col-lg-6 align-items-center d-flex justify-content-end ">
+      <button class="mr-1" mat-stroked-button color="primary" (click)="handleShowTodayData()">View Report for {{hypothisis.reportingDate}}</button>
+      
+      <button *ngIf="!isAdmin" mat-raised-button color="primary" (click)="openDialog('0ms', '0ms')">Submit Report for {{hypothisis.reportingDate}}</button>
     </div>
   </div>
 </div>

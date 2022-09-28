@@ -1,17 +1,17 @@
 export const USERS = [
-  'DrShahid007',
-  'DrNouman',
-  'DrMuneeb',
-  'DrAliRahman',
-  'DrSaidAlamKhan',
+  { id: 'admin', viewValue: 'All', email: 'admin@gmail.com' },
+  { id: 'DrNouman', viewValue: 'Dr. Nouman' },
+  { id: 'DrMuneeb', viewValue: 'Dr. Muneeb' },
+  { id: 'DrAliRahman', viewValue: 'Dr. Ali Rahman' },
+  { id: 'DrSaidAlamKhan', viewValue: 'Dr. Said Alam Khan' },
 ];
-export const USERS_EMAIL=[
+export const USERS_EMAIL = [
   'muhammadshahid.15.pk@gmail.com',
   'drnouman@edss.com',
   'drmuneeb@edss.com',
   'dralirahman@edss.com',
-  'drsaidalamkhan@edss.com'
-]
+  'drsaidalamkhan@edss.com',
+];
 export const PROVINCES = ['Khyber Pakhtunkhwa'];
 
 export const RAPID_ANTIGEN_TESTS_CONDUCTED = [
