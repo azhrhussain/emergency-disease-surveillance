@@ -101,7 +101,13 @@ export class QuestionnaireComponent implements OnInit {
     this.userid === 'admin' || this.userid === 'muhammadshahid.15.pk';
   date: any = new Date().getDate();
   today: string = new Date().toLocaleDateString('en-ZA');
-
+  isEdit: boolean = false;
+  canEdit: boolean = false;
+  isAddNew: boolean=false;
+  togelEdit=()=>{
+    this.isAddNew = !this.isAddNew;
+    this.isEdit = !this.isEdit;
+  }
   hypothisis: any = {
     submittedBy: this.selectedUser,
     reportingDate: this.today,
@@ -168,11 +174,13 @@ export class QuestionnaireComponent implements OnInit {
   //     .subscribe((response) => console.log('response:', response));
   // }
   todaysRawData: any;
-  exportFileTitle = `${this.today} EDSS Report`;
   excelReportJSON: any =[];
   reportDataForExcelJson: any ={};
+  isReportGeneratedForExport: boolean = false;
+
   export() {
-    this.exportService.exportExcel(this.reportDataForExcelJson, this.exportFileTitle);
+    const exportFileTitle = `${this.reportDataForExcelJson.hypothisis.submittedBy} [${this.reportDataForExcelJson.hypothisis.reportingDate}] EDSS Report`;
+    this.exportService.exportExcel(this.reportDataForExcelJson, exportFileTitle);
   }
   handleShowTodayData() {
     //api endpoint
@@ -217,7 +225,11 @@ export class QuestionnaireComponent implements OnInit {
               questionSumData: this.questionSumData,
               rapidAntigenTest: this.rapidAntigenTest
             }
-            // this.excelReportJSON.push(reportDataForExcel);
+
+            this.isReportGeneratedForExport=true;
+            this.canEdit= true;
+            this.isAddNew= false;
+            this.isEdit= false;
           }
         } else {
           alert(
@@ -267,6 +279,8 @@ export class QuestionnaireComponent implements OnInit {
     )
       .then(() => {
         // Data saved successfully!
+        this.isEdit= false;
+        this.isAddNew= false;
         alert('Data Submitted Successfuly...!\n\nHave a good day! :)');
       })
       .catch((error) => {
