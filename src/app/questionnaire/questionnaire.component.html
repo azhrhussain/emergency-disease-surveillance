@@ -1,62 +1,80 @@
 <section ngClass="questionnaire-main">
-  <div ngClass="container">
+  <div ngClass="container-fluid">
     <div class="row">
-      <div class="col-12 col-md-6 my-3">
-        <button
-        class="mr-1"
-        mat-stroked-button
-        color="primary"
-        *ngIf="!isAdmin && !isAddNew"
-        (click)="togelEdit()"
-      >
-      <mat-icon *ngIf="!canEdit">add</mat-icon>
-      <mat-icon *ngIf="canEdit"> edit</mat-icon>
-      {{!canEdit? "Add new": 'Edit current'}}
-        record
-      </button>
-      <button
-          class="mr-1"
-          mat-stroked-button
-          class="bg-danger text-white"
-          *ngIf="!isAdmin && isAddNew"
-          (click)="togelEdit()"
-        >
-        <mat-icon> cancel</mat-icon> Cancel posting record
-        </button>
+      <div class="col-12 col-md-6 my-2">
+        <div class="row">
+          <div
+            [ngClass]="[!isReportGeneratedForExport ? 'col-12' : 'col-6']"
+            class="col-md-6"
+          >
+            <button
+              class="w-100 px-0"
+              mat-stroked-button
+              color="primary"
+              *ngIf="!isAdmin && !isAddNew"
+              (click)="togelEdit()"
+            >
+              <mat-icon *ngIf="!canEdit">add</mat-icon>
+              <mat-icon *ngIf="canEdit"> edit</mat-icon>
+              {{ !canEdit ? "Add new" : "Edit current" }}
+              record
+            </button>
+            <button
+              mat-stroked-button
+              class="w-100 px-0 bg-danger text-white"
+              *ngIf="!isAdmin && isAddNew"
+              (click)="togelEdit()"
+            >
+              <mat-icon> cancel</mat-icon> Cancel posting
+            </button>
+          </div>
+          <div *ngIf="isReportGeneratedForExport" class="col-6 d-lg-none">
+            <button
+              mat-stroked-button
+              class="w-100"
+              color="primary"
+              (click)="export()"
+            >
+              <mat-icon>assignment_returned</mat-icon> Export to Excel
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="col-12 col-md-6 my-2 align-items-center d-flex justify-content-end">
-        
 
-        <button
-          class="mr-1"
-          mat-stroked-button
-          color="primary"
-          (click)="handleShowTodayData()"
-        >
-          <mat-icon> bar_chart</mat-icon> Generate for report
-          {{ hypothisis.reportingDate }}
-        </button>
-        <button
-          *ngIf="isReportGeneratedForExport"
-          mat-stroked-button
-          color="primary"
-          (click)="export()"
-        >
-          <mat-icon>assignment_returned</mat-icon> Export to Excel
-        </button>
+      <div class="col-12 col-md-6 pt-2 align-items-center justify-content-end">
+        <div class="row d-flex justify-content-end">
+          <div class="col-12 col-lg-6">
+            <button
+              class="px-0 w-100"
+              mat-stroked-button
+              color="primary"
+              (click)="handleShowTodayData()"
+            >
+              <mat-icon> bar_chart</mat-icon> Generate report
+              {{ hypothisis.reportingDate }}
+            </button>
+          </div>
+          <div
+            *ngIf="isReportGeneratedForExport"
+            class="col-6 d-none d-lg-flex"
+          >
+            <button
+              mat-stroked-button
+              class="w-100"
+              color="primary"
+              (click)="export()"
+            >
+              <mat-icon>assignment_returned</mat-icon> Export to Excel
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- <header class="text-center">
-      <h2 class="h2">Pakistan Flood Response 2022</h2>
-      <h2 class="h2">
-        Emergency Disease Surveillance System (EDSS) Reporting Form
-      </h2>
-      <h2 class="h2">Health Facility Level/Medical & Health Camp</h2>
-    </header>-->
+
     <div class="spacer1"></div>
     <div class="spacer1"></div>
-    <mat-grid-list class="col-space-reset" rowHeight="80px" cols="4">
-      <mat-grid-tile ngClass="col-space-reset">
+    <div class="row">
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Submitted by </mat-label>
           <mat-select [(value)]="hypothisis.submittedBy" [disabled]="!isAdmin">
@@ -65,8 +83,8 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Reporting Date</mat-label>
           <input
@@ -75,9 +93,8 @@
             [(ngModel)]="hypothisis.reportingDate"
           />
         </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Province</mat-label>
           <mat-select [(value)]="hypothisis.province" [disabled]="!isEdit">
@@ -86,8 +103,8 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>District</mat-label>
           <textarea
@@ -101,9 +118,8 @@
             [(ngModel)]="hypothisis.districts"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Tehsil/Taluka</mat-label>
           <textarea
@@ -117,8 +133,8 @@
             [(ngModel)]="hypothisis.tehsil"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>UC/Village/settlement</mat-label>
           <textarea
@@ -132,8 +148,8 @@
             [(ngModel)]="hypothisis.uc"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Health Facility Name</mat-label>
           <textarea
@@ -147,8 +163,8 @@
             [(ngModel)]="hypothisis.healthFacilityName"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Health Facility Type</mat-label>
           <textarea
@@ -162,8 +178,8 @@
             [(ngModel)]="hypothisis.healthFacilityType"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Health Facility Code</mat-label>
           <textarea
@@ -177,8 +193,8 @@
             [(ngModel)]="hypothisis.healthFacilityCode"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Medical/Health Camp</mat-label>
           <textarea
@@ -192,8 +208,8 @@
             [(ngModel)]="hypothisis.healthFacilityCamp"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Contact number</mat-label>
           <textarea
@@ -207,8 +223,8 @@
             [(ngModel)]="hypothisis.phoneNumber"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Organization name</mat-label>
           <textarea
@@ -222,8 +238,8 @@
             [(ngModel)]="hypothisis.organizationName"
           ></textarea>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-3">
         <mat-form-field appearance="fill">
           <mat-label>Catchment Population</mat-label>
           <input
@@ -233,19 +249,201 @@
             [(ngModel)]="hypothisis.catchmentPopulation"
           />
         </mat-form-field>
-      </mat-grid-tile>
-    </mat-grid-list>
+      </div>
+    </div>
   </div>
 </section>
-<div class="spacer1"></div>
-<div class="spacer1"></div>
-<div class="container">
+
+<div class="container-fluid">
   <div class="row">
-    <div class="col-12">
-      <h2 class="h2 border-bottom">Questions</h2>
+    <div class="col-12 d-lg-none">
+      <table
+      
+        class="table-bordered w-100"
+        cellspacing="0"
+        cellpadding="0"
+      >
+        <tbody>
+          <ng-container *ngFor="let que of questions; let i = index">
+            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="question">
+              <th  class="text-left" colspan="4" scope="row">{{ i + 1 }}. {{ que.q }}</th>
+            </tr>
+
+            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center condition">
+              <td class="left" colspan="2"> <strong>&lt;</strong> 5 Years Cases</td>
+              <td class="right" colspan="2"><strong>&ge;</strong> 5 Years Cases</td>
+            </tr>
+            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center male-female">
+              <th class="left">M</th>
+              <th class="left">F</th>
+              <th class="right">M</th>
+              <th class="right">F</th>
+            </tr>
+            <!-- reapeat 1 -->
+            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="values-row">
+              <td class="left">
+                <span *ngIf="!isEdit">
+                  {{ que.case.lessThen5.male }}
+                </span>
+                <input
+                  *ngIf="isEdit"
+                  type="number"
+                  [(ngModel)]="que.case.lessThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'lessThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+              <td class="left">
+                <span *ngIf="!isEdit"> {{ que.case.lessThen5.female }} </span>
+                <input
+                  *ngIf="isEdit"
+                  matTooltipClass="bg-danger"
+                  [(ngModel)]="que.case.lessThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'lessThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+              <td>
+                <span *ngIf="!isEdit"> {{ que.case.greaterThen5.male }} </span>
+                <input
+                  *ngIf="isEdit"
+                  type="number"
+                  [(ngModel)]="que.case.greaterThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'greaterThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+              <td>
+                <span *ngIf="!isEdit">
+                  {{ que.case.greaterThen5.female }}
+                </span>
+                <input
+                  *ngIf="isEdit"
+                  type="number"
+                  [(ngModel)]="que.case.greaterThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'greaterThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+            </tr>
+            <!-- reapeat 1 end -->
+            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center condition">
+              <td colspan="2"><strong>&lt;</strong> 5 Years Deaths</td>
+              <td colspan="2"><strong>&ge;</strong> 5 Years Deaths</td>
+            </tr>
+            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center male-female">
+              <th>M</th>
+              <th>F</th>
+              <th>M</th>
+              <th>F</th>
+            </tr>
+            <!-- reapeat 2 -->
+            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="values-row">
+              <td>
+                <span *ngIf="!isEdit"> {{ que.death.lessThen5.male }} </span>
+                <input
+                  *ngIf="isEdit"
+                  type="number"
+                  [(ngModel)]="que.death.lessThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'lessThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+
+              <td>
+                <span *ngIf="!isEdit"> {{ que.death.lessThen5.female }} </span>
+                <input
+                  *ngIf="isEdit"
+                  type="number"
+                  [(ngModel)]="que.death.lessThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'lessThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+
+              <td>
+                <span *ngIf="!isEdit"> {{ que.death.greaterThen5.male }} </span>
+                <input
+                  *ngIf="isEdit"
+                  type="number"
+                  [(ngModel)]="que.death.greaterThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'greaterThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+
+              <td>
+                <span *ngIf="!isEdit">
+                  {{ que.death.greaterThen5.female }}
+                </span>
+                <input
+                  *ngIf="isEdit"
+                  type="number"
+                  [(ngModel)]="que.death.greaterThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'greaterThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+            </tr>
+            <!-- reapeat 2 end -->
+          </ng-container>
+        </tbody>
+        <tfoot class="text-center total">
+          <tr class="text-center">
+            <th colspan="4" scope="row">TOTAL</th>
+          </tr>
+          <tr class="text-center condition">
+            <td colspan="2"><strong>&lt;</strong> 5 Years Cases</td>
+            <td colspan="2"><strong>&ge;</strong> 5 Years Cases</td>
+          </tr>
+          <tr class="text-center male-female">
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+          </tr>
+          <tr>
+            <th>{{ questionSumData["case"].lessThen5.male }}</th>
+            <th>{{ questionSumData["case"].lessThen5.female }}</th>
+            <th>{{ questionSumData["case"].greaterThen5.male }}</th>
+            <th>{{ questionSumData["case"].greaterThen5.female }}</th>
+          </tr>
+          <tr class="text-center condition">
+            <td colspan="2"><strong>&lt;</strong> 5 Years Deaths</td>
+            <td colspan="2"><strong>&ge;</strong> 5 Years Deaths</td>
+          </tr>
+          <tr class="text-center male-female">
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+          </tr>
+          <tr>
+            <th>{{ questionSumData["death"].lessThen5.male }}</th>
+            <th>{{ questionSumData["death"].lessThen5.female }}</th>
+            <th>{{ questionSumData["death"].greaterThen5.male }}</th>
+            <th>{{ questionSumData["death"].greaterThen5.female }}</th>
+          </tr>
+        </tfoot>
+      </table>
     </div>
-    <div class="spacer1"></div>
-    <div class="col-12">
+    <div class="col-12 d-none d-lg-block">
       <div class="table-responsive">
         <table
           style="minwidth: 600px"
@@ -426,7 +624,7 @@
         </table>
       </div>
     </div>
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-6 mt-4">
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
@@ -465,12 +663,15 @@
       </table>
     </div>
 
-    <div class="col-12 col-lg-6 align-items-center d-flex justify-content-end">
+    <div
+      class="col-12 col-lg-6 align-items-center d-lg-flex mb-5 justify-content-end"
+    >
       <!-- <button class="mr-1" mat-stroked-button color="primary" (click)="handleShowTodayData()">View Report for {{hypothisis.reportingDate}}</button> -->
 
       <button
         *ngIf="isEdit"
         mat-raised-button
+        class="w-100"
         color="primary"
         (click)="openDialog('0ms', '0ms')"
       >
@@ -480,7 +681,7 @@
   </div>
 </div>
 
-<div style="display: none" class="reports-table-container">
+<div style="display: none" class="reports-table-container-fluid">
   <table
     id="reports-tables"
     class="table-bordered"
@@ -488,7 +689,7 @@
     cellpadding="0"
   >
     <tbody>
-      <tr style="height: 20px">
+      <tr>
         <td class="s0"></td>
         <td class="s1" colspan="8">
           Pakistan Flood Response 2022 <br />
@@ -499,7 +700,7 @@
       </tr>
     </tbody>
     <tbody>
-      <tr style="height: 20px">
+      <tr>
         <td></td>
         <td></td>
         <td></td>
@@ -511,7 +712,7 @@
         <td></td>
         <td></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s2">Reporting date</td>
         <td class="s3">
           {{ hypothisis.reportingDate }}
@@ -527,7 +728,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s6 softmerge">Contact number</td>
         <td class="s7">{{ hypothisis.phoneNumber }}</td>
         <td class="s8">District</td>
@@ -539,7 +740,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s2 softmerge">Organization name</td>
         <td class="s3 softmerge">
           {{ hypothisis.organizationName }}
@@ -553,7 +754,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s2 softmerge">Catchment Population</td>
         <td class="s9">{{ hypothisis.catchmentPopulation }}</td>
         <td class="s2 softmerge">UC/Village/settlement</td>
@@ -565,7 +766,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s2">Submitted by</td>
         <td class="s3">
           {{
@@ -581,7 +782,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s10"></td>
         <td class="s11"></td>
         <td class="s2 softmerge">Health Facility Code</td>
@@ -593,7 +794,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s10"></td>
         <td class="s11"></td>
         <td class="s2 softmerge">Health Facility Type</td>
@@ -605,7 +806,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s10"></td>
         <td class="s11"></td>
         <td class="s2 softmerge">Medical/Health Camp</td>
@@ -617,7 +818,7 @@
         <td class="s0"></td>
         <td class="s0"></td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td></td>
         <td></td>
         <td></td>
@@ -630,19 +831,19 @@
         <td></td>
       </tr>
 
-      <tr style="height: 20px">
+      <tr>
         <td class="s0" dir="ltr" rowspan="3">Q. ID</td>
         <td class="s0" rowspan="3">Disease / Syndromes</td>
         <td class="s0" colspan="4">Cases</td>
         <td class="s0" colspan="4">Deaths</td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s0" colspan="2">&lt; 5 yrs</td>
         <td class="s0" colspan="2">&gt; 5 yrs</td>
         <td class="s0" colspan="2">&lt; 5 yrs</td>
         <td class="s0" colspan="2">&gt;5 yrs</td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s0">M</td>
         <td class="s0">F</td>
         <td class="s0">M</td>
@@ -676,19 +877,19 @@
         <th>{{ questionSumData["death"].greaterThen5.male }}</th>
         <th>{{ questionSumData["death"].greaterThen5.female }}</th>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s0" colspan="10">
           * Diseases/conditions other than listed above which includes, NCDs,
           Injuries, maternal and reproductive health issues, etc.
         </td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td class="s0" colspan="10">
           Any of the diseases classified as others will be reported separately
           if it exceeds 10% of the total consultations/day.
         </td>
       </tr>
-      <tr style="height: 20px">
+      <tr>
         <td></td>
         <td></td>
         <td></td>

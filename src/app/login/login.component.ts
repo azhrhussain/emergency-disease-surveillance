@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
     this.email = '';
     this.password = '';
   };
+  isLoggedIn: any = localStorage.getItem('token');
   ngOnInit(): void {}
 
   // auth = getAuth();

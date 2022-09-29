@@ -17,10 +17,37 @@ body {
 .nav-link {
   font-size: 0.8rem;
   font-weight: normal;
-  mat-icon{
+  mat-icon {
     font-size: 1rem;
     display: flex !important;
     align-items: center;
+  }
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: 0 !important;
+  background-color: #fff;
+}
+.mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-flex {
+  background-color: #fff;
+}
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  border-bottom: 1px solid #ccc;
+}
+
+@media (max-width: 991px){
+  .mat-form-field-appearance-fill .mat-form-field-infix {
+    border-bottom: 1px solid #212529;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-fluid {
+    max-width: 1200px;
+  }
+}
+@media (min-width: 1400px) {
+  .container-fluid {
+    max-width: 1400px;
   }
 }
 

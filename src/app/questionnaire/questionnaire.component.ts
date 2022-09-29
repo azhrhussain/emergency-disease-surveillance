@@ -179,7 +179,8 @@ export class QuestionnaireComponent implements OnInit {
   isReportGeneratedForExport: boolean = false;
 
   export() {
-    const exportFileTitle = `${this.reportDataForExcelJson.hypothisis.submittedBy} [${this.reportDataForExcelJson.hypothisis.reportingDate}] EDSS Report`;
+    const fileName = this.reportDataForExcelJson.hypothisis.submittedBy === 'admin'?'Main': this.reportDataForExcelJson.hypothisis.submittedBy;
+    const exportFileTitle = `${fileName} [${this.reportDataForExcelJson.hypothisis.reportingDate}] EDSS Report`;
     this.exportService.exportExcel(this.reportDataForExcelJson, exportFileTitle);
   }
   handleShowTodayData() {
@@ -203,6 +204,7 @@ export class QuestionnaireComponent implements OnInit {
               this.questions = questionsData;
               this.rapidAntigenTest = rapidAntigenTestData;
               this.hypothisis.submittedBy = this.selectedUser;
+              this.isReportGeneratedForExport=true;
             } else {
               const user =
                 this.selectedUser === this.hypothisis.submittedBy
@@ -214,6 +216,7 @@ export class QuestionnaireComponent implements OnInit {
                 this.hypothisis = hypothisis;
                 this.questions = queestionsData;
                 this.rapidAntigenTest = rapidAntigenTest;
+                this.isReportGeneratedForExport=true;
               } else {
                 alert('Opps!!! No record found for selected user.');
               }
@@ -226,7 +229,7 @@ export class QuestionnaireComponent implements OnInit {
               rapidAntigenTest: this.rapidAntigenTest
             }
 
-            this.isReportGeneratedForExport=true;
+            
             this.canEdit= true;
             this.isAddNew= false;
             this.isEdit= false;
