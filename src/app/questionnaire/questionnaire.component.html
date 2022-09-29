@@ -1,5 +1,20 @@
 <section ngClass="questionnaire-main">
   <div ngClass="container">
+    <div class="row">
+      <div class="col-12 my-3 align-items-center d-flex justify-content-end">
+        <button
+          class="mr-1"
+          mat-stroked-button
+          color="primary"
+          (click)="handleShowTodayData()"
+        >
+          Generate for {{ hypothisis.reportingDate }}
+        </button>
+        <button mat-stroked-button color="primary" (click)="export()">
+          Export to Excel
+        </button>
+      </div>
+    </div>
     <!-- <header class="text-center">
       <h2 class="h2">Pakistan Flood Response 2022</h2>
       <h2 class="h2">
@@ -8,14 +23,14 @@
       <h2 class="h2">Health Facility Level/Medical & Health Camp</h2>
     </header>-->
     <div class="spacer1"></div>
-    <div class="spacer1"></div> 
+    <div class="spacer1"></div>
     <mat-grid-list class="col-space-reset" rowHeight="80px" cols="4">
       <mat-grid-tile ngClass="col-space-reset">
         <mat-form-field appearance="fill">
           <mat-label>Submitted by </mat-label>
           <mat-select [(value)]="hypothisis.submittedBy" [disabled]="!isAdmin">
             <mat-option *ngFor="let user of users" [value]="user['id']">
-              {{ user['viewValue'] }}
+              {{ user["viewValue"] }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -55,7 +70,7 @@
           ></textarea>
         </mat-form-field>
       </mat-grid-tile>
-      
+
       <mat-grid-tile>
         <mat-form-field appearance="fill">
           <mat-label>Tehsil/Taluka</mat-label>
@@ -190,141 +205,185 @@
     </div>
     <div class="spacer1"></div>
     <div class="col-12">
-      <table class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th scope="col" rowspan="3">#</th>
-            <th scope="col" rowspan="3">Disease / Syndromes</th>
+      <div class="table-responsive">
+        <table
+          style="minwidth: 600px"
+          id="questions-table"
+          class="table table-striped table-bordered"
+        >
+          <thead>
+            <tr>
+              <th scope="col" rowspan="3">#</th>
+              <th scope="col" rowspan="3">Disease / Syndromes</th>
 
-            <th scope="colgroup" colspan="4" class="text-center">Cases</th>
-            <th scope="colgroup" colspan="4" class="text-center">Deaths</th>
-          </tr>
+              <th scope="colgroup" colspan="4" class="text-center">Cases</th>
+              <th scope="colgroup" colspan="4" class="text-center">Deaths</th>
+            </tr>
 
-          <tr class="text-center">
-            <th colspan="2">&lt; 5 years</th>
-            <th colspan="2">&ge; 5 years</th>
-            <th colspan="2">&lt; 5 years</th>
-            <th colspan="2">&ge; 5 years</th>
-          </tr>
+            <tr class="text-center">
+              <th colspan="2">&lt; 5 years</th>
+              <th colspan="2">&ge; 5 years</th>
+              <th colspan="2">&lt; 5 years</th>
+              <th colspan="2">&ge; 5 years</th>
+            </tr>
 
-          <tr class="text-center">
-            <th class="td-size">M</th>
-            <th class="td-size">F</th>
-            <th class="td-size">M</th>
-            <th class="td-size">F</th>
+            <tr class="text-center">
+              <th class="td-size">M</th>
+              <th class="td-size">F</th>
+              <th class="td-size">M</th>
+              <th class="td-size">F</th>
 
-            <th class="td-size">M</th>
-            <th class="td-size">F</th>
-            <th class="td-size">M</th>
-            <th class="td-size">F</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let que of questions; let i = index">
-            <th scope="row">{{ i + 1 }}</th>
-            <td class="text-left">{{ que.q }}</td>
+              <th class="td-size">M</th>
+              <th class="td-size">F</th>
+              <th class="td-size">M</th>
+              <th class="td-size">F</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let que of questions; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td class="text-left">{{ que.q }}</td>
 
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.case.lessThen5.male"
-                (ngModelChange)="
-                  onChangeCase($event, 'case', 'lessThen5', 'male')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.case.lessThen5.female"
-                (ngModelChange)="
-                  onChangeCase($event, 'case', 'lessThen5', 'female')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.case.greaterThen5.male"
-                (ngModelChange)="
-                  onChangeCase($event, 'case', 'greaterThen5', 'male')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.case.greaterThen5.female"
-                (ngModelChange)="
-                  onChangeCase($event, 'case', 'greaterThen5', 'female')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
+              <td>
+                <span *ngIf="isAdmin">
+                  {{ que.case.lessThen5.male }}
+                </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Case &lt; 5, M"
+                  matTooltipClass="bg-primary"
+                  [(ngModel)]="que.case.lessThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'lessThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+              <td>
+                <span *ngIf="isAdmin"> {{ que.case.lessThen5.female }} </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Case &lt; 5, F"
+                  matTooltipClass="bg-danger"
+                  [(ngModel)]="que.case.lessThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'lessThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+              <td>
+                <span *ngIf="isAdmin"> {{ que.case.greaterThen5.male }} </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Case &ge; 5, M"
+                  matTooltipClass="bg-primary"
+                  [(ngModel)]="que.case.greaterThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'greaterThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+              <td>
+                <span *ngIf="isAdmin">
+                  {{ que.case.greaterThen5.female }}
+                </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Case &ge; 5 - F"
+                  matTooltipClass="bg-danger"
+                  [(ngModel)]="que.case.greaterThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'case', 'greaterThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
 
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.death.lessThen5.male"
-                (ngModelChange)="
-                  onChangeCase($event, 'death', 'lessThen5', 'male')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
+              <td>
+                <span *ngIf="isAdmin"> {{ que.death.lessThen5.male }} </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Death &lt; 5 - M"
+                  matTooltipClass="bg-primary"
+                  [(ngModel)]="que.death.lessThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'lessThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
 
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.death.lessThen5.female"
-                (ngModelChange)="
-                  onChangeCase($event, 'death', 'lessThen5', 'female')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
+              <td>
+                <span *ngIf="isAdmin"> {{ que.death.lessThen5.female }} </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Death &lt; 5 - F"
+                  matTooltipClass="bg-danger"
+                  [(ngModel)]="que.death.lessThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'lessThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
 
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.death.greaterThen5.male"
-                (ngModelChange)="
-                  onChangeCase($event, 'death', 'greaterThen5', 'male')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
+              <td>
+                <span *ngIf="isAdmin"> {{ que.death.greaterThen5.male }} </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Death &ge; 5 - M"
+                  matTooltipClass="bg-primary"
+                  [(ngModel)]="que.death.greaterThen5.male"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'greaterThen5', 'male')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
 
-            <td>
-              <input
-                type="number"
-                [(ngModel)]="que.death.greaterThen5.female"
-                (ngModelChange)="
-                  onChangeCase($event, 'death', 'greaterThen5', 'female')
-                "
-                class="form-control input-m-f"
-              />
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr class="text-center">
-            <th colspan="2" scope="row">TOTAL</th>
-            <th>{{ questionSumData["case"].lessThen5.male }}</th>
-            <th>{{ questionSumData["case"].lessThen5.female }}</th>
-            <th>{{ questionSumData["case"].greaterThen5.male }}</th>
-            <th>{{ questionSumData["case"].greaterThen5.female }}</th>
+              <td>
+                <span *ngIf="isAdmin">
+                  {{ que.death.greaterThen5.female }}
+                </span>
+                <input
+                  *ngIf="!isAdmin"
+                  type="number"
+                  matTooltip="Death &ge; 5 - F"
+                  matTooltipClass="bg-danger"
+                  [(ngModel)]="que.death.greaterThen5.female"
+                  (ngModelChange)="
+                    onChangeCase($event, 'death', 'greaterThen5', 'female')
+                  "
+                  class="form-control input-m-f"
+                />
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="text-center">
+              <th colspan="2" scope="row">TOTAL</th>
+              <th>{{ questionSumData["case"].lessThen5.male }}</th>
+              <th>{{ questionSumData["case"].lessThen5.female }}</th>
+              <th>{{ questionSumData["case"].greaterThen5.male }}</th>
+              <th>{{ questionSumData["case"].greaterThen5.female }}</th>
 
-            <th>{{ questionSumData["death"].lessThen5.male }}</th>
-            <th>{{ questionSumData["death"].lessThen5.female }}</th>
-            <th>{{ questionSumData["death"].greaterThen5.male }}</th>
-            <th>{{ questionSumData["death"].greaterThen5.female }}</th>
-          </tr>
-        </tfoot>
-      </table>
+              <th>{{ questionSumData["death"].lessThen5.male }}</th>
+              <th>{{ questionSumData["death"].lessThen5.female }}</th>
+              <th>{{ questionSumData["death"].greaterThen5.male }}</th>
+              <th>{{ questionSumData["death"].greaterThen5.female }}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
     <div class="col-12 col-lg-6">
       <table class="table table-striped table-bordered">
@@ -357,10 +416,610 @@
       </table>
     </div>
 
-    <div class="col-12 col-lg-6 align-items-center d-flex justify-content-end ">
-      <button class="mr-1" mat-stroked-button color="primary" (click)="handleShowTodayData()">View Report for {{hypothisis.reportingDate}}</button>
-      
-      <button *ngIf="!isAdmin" mat-raised-button color="primary" (click)="openDialog('0ms', '0ms')">Submit Report for {{hypothisis.reportingDate}}</button>
+    <div class="col-12 col-lg-6 align-items-center d-flex justify-content-end">
+      <!-- <button class="mr-1" mat-stroked-button color="primary" (click)="handleShowTodayData()">View Report for {{hypothisis.reportingDate}}</button> -->
+
+      <button
+        *ngIf="!isAdmin"
+        mat-raised-button
+        color="primary"
+        (click)="openDialog('0ms', '0ms')"
+      >
+        Submit Report for {{ hypothisis.reportingDate }}
+      </button>
     </div>
   </div>
+</div>
+
+<div class="reports-table-container">
+  <table id="reports-tables" class="table-bordered" cellspacing="0" cellpadding="0">
+    <thead>
+      <tr>
+        <!-- <th class="row-header freezebar-origin-ltr"></th> -->
+        <!-- <th id="0C0" style="width: 100px" class="column-headers-background">
+          A
+        </th> -->
+        
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height: 20px">
+        <!-- <th id="0R0" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">1</div>
+        </th> -->
+        <td class="s0"></td>
+        <td class="s1" colspan="7">
+          "Pakistan Flood Response 2022 &#10;&#10;&#10;<div></div> <br />Emergency Disease Surveillance"
+          "System (EDSS) Reporting Form" <br />"Health Facility Level/Medical &amp;
+          Health Camp"
+        </td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R1" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">2</div>
+        </th> -->
+        <td class="s2">Reporting date</td>
+        <td class="s3">23/09 / 2022</td>
+        <td class="s2">Province</td>
+        <td class="s4 softmerge">
+          <div class="softmerge-inner" style="width: 198px; left: -1px">
+            Khyber Pakhtunkhwa
+          </div>
+        </td>
+        <td class="s5"></td>
+        <td class="s5"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R2" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">3</div>
+        </th> -->
+        <td class="s6 softmerge">
+          <div class="softmerge-inner" style="width: 198px; left: -1px">
+            Contact number
+          </div>
+        </td>
+        <td class="s7"></td>
+        <td class="s8">District</td>
+        <td class="s3">Dera Ismail Khan</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R3" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">4</div>
+        </th> -->
+        <td class="s2 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Organization name
+          </div>
+        </td>
+        <td class="s3 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            UNICEF, Health Deptt
+          </div>
+        </td>
+        <td class="s2">Tahsil/Taluka</td>
+        <td class="s3">Daraban</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R4" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">5</div>
+        </th> -->
+        <td class="s2 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Catchment Population
+          </div>
+        </td>
+        <td class="s9">24690</td>
+        <td class="s2 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            UC/Village/settlement
+          </div>
+        </td>
+        <td class="s3">Uc Musa Zai</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R5" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">6</div>
+        </th> -->
+        <td class="s2">Submitted by</td>
+        <td class="s3">Dr.Ali Rehman</td>
+        <td class="s2 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Health Facility Name
+          </div>
+        </td>
+        <td class="s3">BHU Musa zai</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R6" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">7</div>
+        </th> -->
+        <td class="s10"></td>
+        <td class="s11"></td>
+        <td class="s2 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Health Facility Code
+          </div>
+        </td>
+        <td class="s9">312043</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R7" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">8</div>
+        </th> -->
+        <td class="s10"></td>
+        <td class="s11"></td>
+        <td class="s2 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Health Facility Type
+          </div>
+        </td>
+        <td class="s3">BHU</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R8" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">9</div>
+        </th> -->
+        <td class="s10"></td>
+        <td class="s11"></td>
+        <td class="s2 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Medical/Health Camp
+          </div>
+        </td>
+        <td class="s3">BHU Musa Zai</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R9" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">10</div>
+        </th> -->
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R10" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">11</div>
+        </th> -->
+        <td class="s12" rowspan="3">Disease / Syndromes</td>
+        <td class="s12" colspan="4">Cases</td>
+        <td class="s12" colspan="4">Deaths</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R11" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">12</div>
+        </th> -->
+        <td class="s12" colspan="2">&lt; 5 yrs</td>
+        <td class="s13" colspan="2">&gt; 5 yrs</td>
+        <td class="s12" colspan="2">&lt; 5 yrs</td>
+        <td class="s13" colspan="2">&gt;5 yrs</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R12" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">13</div>
+        </th> -->
+        <td class="s12">M</td>
+        <td class="s12">F</td>
+        <td class="s12">M</td>
+        <td class="s12">F</td>
+        <td class="s12">M</td>
+        <td class="s12">F</td>
+        <td class="s12">M</td>
+        <td class="s12">F</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R13" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">14</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Acute watery diarrhea (AWD) /Suspected Cholera
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R14" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">15</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Other acute diarrhea
+          </div>
+        </td>
+        <td class="s15">6</td>
+        <td class="s15">4</td>
+        <td class="s15">3</td>
+        <td class="s15">4</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R15" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">16</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Acute Upper Respiratory Tract Infection
+          </div>
+        </td>
+        <td class="s15">2</td>
+        <td class="s15">4</td>
+        <td class="s15">3</td>
+        <td class="s15">1</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R16" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">17</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Suspected Dengue Fever
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R17" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">18</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Suspected Malaria
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">3</td>
+        <td class="s15">5</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R18" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">19</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Suspected Chickenpox
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R19" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">20</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Suspected Typhoid Fever
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R20" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">21</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Neonatal tetanus/Neonatal sepsis
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R21" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">22</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Acute Jaundice Syndrome
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R22" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">23</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Acute Hemorrhagic Fever/CCHF
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R23" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">24</div>
+        </th> -->
+        <td class="s14">Scabies</td>
+        <td class="s15">4</td>
+        <td class="s15">1</td>
+        <td class="s15">5</td>
+        <td class="s15">1</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R24" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">25</div>
+        </th> -->
+        <td class="s14 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Cutaneous Leishmaniasis
+          </div>
+        </td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R25" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">26</div>
+        </th> -->
+        <td class="s14">Others*</td>
+        <td class="s15">1</td>
+        <td class="s15">2</td>
+        <td class="s15">6</td>
+        <td class="s15">4</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+        <td class="s15">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R26" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">27</div>
+        </th> -->
+        <td class="s12">TOTAL</td>
+        <td class="s16">13</td>
+        <td class="s16">11</td>
+        <td class="s16">20</td>
+        <td class="s16">15</td>
+        <td class="s16">0</td>
+        <td class="s16">0</td>
+        <td class="s16">0</td>
+        <td class="s16">0</td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R27" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">28</div>
+        </th> -->
+        <td class="s17" colspan="9">
+          * Diseases/conditions other than listed above which includes, NCDs,
+          Injuries, maternal and reproductive health issues, etc.
+        </td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R28" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">29</div>
+        </th> -->
+        <td class="s17" colspan="9">
+          Any of the diseases classified as others will be reported separately
+          if it exceeds 10% of the total consultations/day.
+        </td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R29" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">30</div>
+        </th> -->
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R30" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">31</div>
+        </th> -->
+        <td class="s18 softmerge">
+          <div class="softmerge-inner" style="width: 97px; left: -1px">
+            Rapid Antigen Tests Conducted
+          </div>
+        </td>
+        <td class="s19">Total Tests</td>
+        <td class="s19">Positive</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R31" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">32</div>
+        </th> -->
+        <td class="s20">Malaria</td>
+        <td class="s21">8</td>
+        <td class="s21">3</td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R32" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">33</div>
+        </th> -->
+        <td class="s20">Dengue</td>
+        <td class="s21">0</td>
+        <td class="s22"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R33" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">34</div>
+        </th> -->
+        <td class="s20">Hepatitis A</td>
+        <td class="s21">0</td>
+        <td class="s22"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R34" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">35</div>
+        </th> -->
+        <td class="s20">Hepatitis E</td>
+        <td class="s21">0</td>
+        <td class="s22"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+      <tr style="height: 20px">
+        <!-- <th id="0R35" style="height: 20px" class="row-headers-background">
+          <div class="row-header-wrapper" style="line-height: 20px">36</div>
+        </th> -->
+        <td class="s20">Cholera</td>
+        <td class="s21">0</td>
+        <td class="s22"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+        <td class="s0"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
