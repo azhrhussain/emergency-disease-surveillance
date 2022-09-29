@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import {
   Database,
@@ -14,6 +14,7 @@ import {
 import {
   PROVINCES,
   QUESTIONS,
+  QUESTIONS_API_URL,
   RAPID_ANTIGEN_TESTS_CONDUCTED,
   USERS,
 } from '../utils/constants';
@@ -25,6 +26,7 @@ import {
 import { TEST_DATA } from '../utils/testData';
 import { getDatabase } from 'firebase/database';
 import { ConfirmSaveRepoertDialogComponent } from '../confirm-save-repoert-dialog/confirm-save-repoert-dialog.component';
+import { ExportService } from '../_services/export.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -35,29 +37,38 @@ export class QuestionnaireComponent implements OnInit {
   constructor(
     private http: HttpClient,
     public database: Database,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private exportService: ExportService
   ) {}
+
+  ngOnInit(): void {}
   @Output() onSelectedData = new EventEmitter<any>();
 
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    let dialogConfirmSubmitRef = this.dialog.open(ConfirmSaveRepoertDialogComponent, {
-      width: '500px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-    });
-    const sub = dialogConfirmSubmitRef.componentInstance.submitData.subscribe(() => {
-      // do something
-      this.handleSave();
-      console.log('Opned subscribe, submitData',this)
-    });
+  openDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
+    let dialogConfirmSubmitRef = this.dialog.open(
+      ConfirmSaveRepoertDialogComponent,
+      {
+        width: '500px',
+        enterAnimationDuration,
+        exitAnimationDuration,
+      }
+    );
+    const sub = dialogConfirmSubmitRef.componentInstance.submitData.subscribe(
+      () => {
+        // do something
+        this.handleSave();
+        console.log('Opned subscribe, submitData', this);
+      }
+    );
     dialogConfirmSubmitRef.afterClosed().subscribe(() => {
       // unsubscribe onAdd
-      console.log('submitData unsub: close:', sub)
+      console.log('submitData unsub: close:', sub);
     });
   }
 
-
-  
   isEditable: boolean = false;
 
   users: Array<{}> = USERS;
@@ -90,7 +101,13 @@ export class QuestionnaireComponent implements OnInit {
     this.userid === 'admin' || this.userid === 'muhammadshahid.15.pk';
   date: any = new Date().getDate();
   today: string = new Date().toLocaleDateString('en-ZA');
-
+  isEdit: boolean = false;
+  canEdit: boolean = false;
+  isAddNew: boolean=false;
+  togelEdit=()=>{
+    this.isAddNew = !this.isAddNew;
+    this.isEdit = !this.isEdit;
+  }
   hypothisis: any = {
     submittedBy: this.selectedUser,
     reportingDate: this.today,
@@ -147,8 +164,7 @@ export class QuestionnaireComponent implements OnInit {
   //   console.log('onFocusInput:', currentObject);
   // }
 
-  url: string =
-    'https://emergency-disease-surveillance-default-rtdb.asia-southeast1.firebasedatabase.app/questionnaire.json';
+  url: string = QUESTIONS_API_URL;
 
   // onCreatePost(postData: any) {
   //   // Send Http request
@@ -158,6 +174,15 @@ export class QuestionnaireComponent implements OnInit {
   //     .subscribe((response) => console.log('response:', response));
   // }
   todaysRawData: any;
+  excelReportJSON: any =[];
+  reportDataForExcelJson: any ={};
+  isReportGeneratedForExport: boolean = false;
+
+  export() {
+    const fileName = this.reportDataForExcelJson.hypothisis.submittedBy === 'admin'?'Main': this.reportDataForExcelJson.hypothisis.submittedBy;
+    const exportFileTitle = `${fileName} [${this.reportDataForExcelJson.hypothisis.reportingDate}] EDSS Report`;
+    this.exportService.exportExcel(this.reportDataForExcelJson, exportFileTitle);
+  }
   handleShowTodayData() {
     //api endpoint
     console.log('snapToData........');
@@ -179,6 +204,7 @@ export class QuestionnaireComponent implements OnInit {
               this.questions = questionsData;
               this.rapidAntigenTest = rapidAntigenTestData;
               this.hypothisis.submittedBy = this.selectedUser;
+              this.isReportGeneratedForExport=true;
             } else {
               const user =
                 this.selectedUser === this.hypothisis.submittedBy
@@ -190,11 +216,23 @@ export class QuestionnaireComponent implements OnInit {
                 this.hypothisis = hypothisis;
                 this.questions = queestionsData;
                 this.rapidAntigenTest = rapidAntigenTest;
+                this.isReportGeneratedForExport=true;
               } else {
                 alert('Opps!!! No record found for selected user.');
               }
             }
             this.questionSumData = getTotalSum(this.questions);
+            this.reportDataForExcelJson = {
+              hypothisis:this.hypothisis,
+              queestionsData: this.questions,
+              questionSumData: this.questionSumData,
+              rapidAntigenTest: this.rapidAntigenTest
+            }
+
+            
+            this.canEdit= true;
+            this.isAddNew= false;
+            this.isEdit= false;
           }
         } else {
           alert(
@@ -207,33 +245,9 @@ export class QuestionnaireComponent implements OnInit {
       .catch((error) => {
         console.error(error);
       });
-
-    // const urlParams = '/questionnaire/' + this.hypothisis.reportingDate;
-    // const startCountRef = ref(this.database, urlParams);
-    // onValue(startCountRef, (snapshot) => {
-    //   const data = snapshot.val();
-    //   console.log('receidved data:', data);
-    //   // const data = TEST_DATA;
-    //   if (data) {
-    //     const { hypothisisData, questionsData, rapidAntigenTestData } =
-    //       getSumAndMergeData(data);
-    //     this.hypothisis = hypothisisData;
-    //     this.questions = questionsData;
-    //     this.questionSumData = getTotalSum(this.questions);
-    //     this.rapidAntigenTest = rapidAntigenTestData;
-    //   } else {
-    //     alert(
-    //       'Sorry!! No data entries found for ' +
-    //         this.hypothisis.reportingDate +
-    //         '\n\nFor more info please contact Adminstrator.'
-    //     );
-    //   }
-    // });
   }
   selectedUserData: any;
-  // onSelectedUserSave() {
-  //   this.selectedProduct = product;
-  // }
+
   onSelectedUserData() {
     this.handleShowTodayData();
     console.log('todaysRawData-------->', this.todaysRawData);
@@ -268,6 +282,8 @@ export class QuestionnaireComponent implements OnInit {
     )
       .then(() => {
         // Data saved successfully!
+        this.isEdit= false;
+        this.isAddNew= false;
         alert('Data Submitted Successfuly...!\n\nHave a good day! :)');
       })
       .catch((error) => {
@@ -276,9 +292,5 @@ export class QuestionnaireComponent implements OnInit {
           'Something went wrong.\n\nCheck your internet connection or contact with administrator.'
         );
       });
-  }
-
-  ngOnInit(): void {
-    //console.log('submittedByAzhar------>',submittedByAzhar)
   }
 }

@@ -22,6 +22,8 @@ export const RAPID_ANTIGEN_TESTS_CONDUCTED = [
   { id: 5, testName: 'Cholera', tests: 0, positive: 0 },
 ];
 
+export const QUESTIONS_API_URL = 'https://emergency-disease-surveillance-default-rtdb.asia-southeast1.firebasedatabase.app/questionnaire.json';
+
 // export const HYPOTHISIS = {
 //   submittedBy: 'Dr. Shahid',
 //   reportingDate: '9/25/2022',

@@ -1,15 +1,70 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "~bootstrap/dist/css/bootstrap.css";
-.spacer1{
-    height: 1rem;
+.spacer1 {
+  height: 1rem;
+}
+
+.nav-link {
+  font-size: 0.8rem;
+  font-weight: normal;
+  mat-icon {
+    font-size: 1rem;
+    display: flex !important;
+    align-items: center;
   }
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: 0 !important;
+  background-color: #fff;
+}
+.mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-flex {
+  background-color: #fff;
+}
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  border-bottom: 1px solid #ccc;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@media (max-width: 991px){
+  .mat-form-field-appearance-fill .mat-form-field-infix {
+    border-bottom: 1px solid #212529;
+  }
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@media (min-width: 1200px) {
+  .container-fluid {
+    max-width: 1200px;
+  }
+}
+@media (min-width: 1400px) {
+  .container-fluid {
+    max-width: 1400px;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
