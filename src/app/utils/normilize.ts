@@ -22,7 +22,7 @@ export const sumOfQuestion = (
   gender: string
 ): number => {
   return currentObj.reduce<number>((accumulator: number, obj: any) => {
-    return Number(accumulator) + Number(obj[type][campare][gender]);
+    return Number(accumulator) + Number(obj[type][campare][gender] || 0);
   }, 0);
 };
 
@@ -164,10 +164,10 @@ export const getSumAndMergeData = (objOfData: any) => {
 // sum of total question types in questionnaire
 export const getTotalSum = (dataObject: any) => {
   return {
-    qTotal: 22,
+    qTotal: 20,
     case: {
       lessThen5: {
-        male: sumOfQuestion(dataObject, 'case', 'lessThen5', 'male'),
+        male: sumOfQuestion(dataObject, 'case', 'lessThen5', 'male') || '0',
         female: sumOfQuestion(dataObject, 'case', 'lessThen5', 'female'),
       },
       greaterThen5: {
@@ -181,7 +181,7 @@ export const getTotalSum = (dataObject: any) => {
         female: sumOfQuestion(dataObject, 'death', 'lessThen5', 'female'),
       },
       greaterThen5: {
-        male: sumOfQuestion(dataObject, 'death', 'greaterThen5', 'male'),
+        male: sumOfQuestion(dataObject, 'death', 'greaterThen5', 'male') ,
         female: sumOfQuestion(dataObject, 'death', 'greaterThen5', 'female'),
       },
     },

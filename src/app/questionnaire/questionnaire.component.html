@@ -256,31 +256,45 @@
 
 <div class="container-fluid">
   <div class="row">
+    <!-- for mobile -->
     <div class="col-12 d-lg-none">
-      <table
-      
-        class="table-bordered w-100"
-        cellspacing="0"
-        cellpadding="0"
-      >
+      <table class="table-bordered w-100" cellspacing="0" cellpadding="0">
         <tbody>
           <ng-container *ngFor="let que of questions; let i = index">
-            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="question">
-              <th  class="text-left" colspan="4" scope="row">{{ i + 1 }}. {{ que.q }}</th>
+            <tr
+              [ngClass]="[(i + 1) % 2 === 0 ? 'tr-ev' : 'tr-od']"
+              class="question"
+            >
+              <th class="text-left" colspan="4" scope="row">
+                {{ i + 1 }}. {{ que.q }}
+              </th>
             </tr>
 
-            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center condition">
-              <td class="left" colspan="2"> <strong>&lt;</strong> 5 Years Cases</td>
-              <td class="right" colspan="2"><strong>&ge;</strong> 5 Years Cases</td>
+            <tr
+              [ngClass]="[(i + 1) % 2 === 0 ? 'tr-ev' : 'tr-od']"
+              class="text-center condition"
+            >
+              <td class="left" colspan="2">
+                <strong>&lt;</strong> 5 Years Cases
+              </td>
+              <td class="right" colspan="2">
+                <strong>&ge;</strong> 5 Years Cases
+              </td>
             </tr>
-            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center male-female">
+            <tr
+              [ngClass]="[(i + 1) % 2 === 0 ? 'tr-ev' : 'tr-od']"
+              class="text-center male-female"
+            >
               <th class="left">M</th>
               <th class="left">F</th>
               <th class="right">M</th>
               <th class="right">F</th>
             </tr>
             <!-- reapeat 1 -->
-            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="values-row">
+            <tr
+              [ngClass]="[(i + 1) % 2 === 0 ? 'tr-ev' : 'tr-od']"
+              class="values-row"
+            >
               <td class="left">
                 <span *ngIf="!isEdit">
                   {{ que.case.lessThen5.male }}
@@ -288,6 +302,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   [(ngModel)]="que.case.lessThen5.male"
                   (ngModelChange)="
                     onChangeCase($event, 'case', 'lessThen5', 'male')
@@ -298,6 +313,8 @@
               <td class="left">
                 <span *ngIf="!isEdit"> {{ que.case.lessThen5.female }} </span>
                 <input
+                  type="number"
+                  min="0"
                   *ngIf="isEdit"
                   matTooltipClass="bg-danger"
                   [(ngModel)]="que.case.lessThen5.female"
@@ -312,6 +329,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   [(ngModel)]="que.case.greaterThen5.male"
                   (ngModelChange)="
                     onChangeCase($event, 'case', 'greaterThen5', 'male')
@@ -326,6 +344,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   [(ngModel)]="que.case.greaterThen5.female"
                   (ngModelChange)="
                     onChangeCase($event, 'case', 'greaterThen5', 'female')
@@ -335,23 +354,33 @@
               </td>
             </tr>
             <!-- reapeat 1 end -->
-            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center condition">
+            <tr
+              [ngClass]="[(i + 1) % 2 === 0 ? 'tr-ev' : 'tr-od']"
+              class="text-center condition"
+            >
               <td colspan="2"><strong>&lt;</strong> 5 Years Deaths</td>
               <td colspan="2"><strong>&ge;</strong> 5 Years Deaths</td>
             </tr>
-            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="text-center male-female">
+            <tr
+              [ngClass]="[(i + 1) % 2 === 0 ? 'tr-ev' : 'tr-od']"
+              class="text-center male-female"
+            >
               <th>M</th>
               <th>F</th>
               <th>M</th>
               <th>F</th>
             </tr>
             <!-- reapeat 2 -->
-            <tr [ngClass]="[(i+1)%2===0?'tr-ev':'tr-od']" class="values-row">
+            <tr
+              [ngClass]="[(i + 1) % 2 === 0 ? 'tr-ev' : 'tr-od']"
+              class="values-row"
+            >
               <td>
                 <span *ngIf="!isEdit"> {{ que.death.lessThen5.male }} </span>
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   [(ngModel)]="que.death.lessThen5.male"
                   (ngModelChange)="
                     onChangeCase($event, 'death', 'lessThen5', 'male')
@@ -365,6 +394,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   [(ngModel)]="que.death.lessThen5.female"
                   (ngModelChange)="
                     onChangeCase($event, 'death', 'lessThen5', 'female')
@@ -378,6 +408,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   [(ngModel)]="que.death.greaterThen5.male"
                   (ngModelChange)="
                     onChangeCase($event, 'death', 'greaterThen5', 'male')
@@ -393,6 +424,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   [(ngModel)]="que.death.greaterThen5.female"
                   (ngModelChange)="
                     onChangeCase($event, 'death', 'greaterThen5', 'female')
@@ -405,10 +437,10 @@
           </ng-container>
         </tbody>
         <tfoot class="text-center total">
-          <tr class="text-center">
+          <tr class="text-center tr-od">
             <th colspan="4" scope="row">TOTAL</th>
           </tr>
-          <tr class="text-center condition">
+          <tr class="text-center condition tr-od">
             <td colspan="2"><strong>&lt;</strong> 5 Years Cases</td>
             <td colspan="2"><strong>&ge;</strong> 5 Years Cases</td>
           </tr>
@@ -424,7 +456,7 @@
             <th>{{ questionSumData["case"].greaterThen5.male }}</th>
             <th>{{ questionSumData["case"].greaterThen5.female }}</th>
           </tr>
-          <tr class="text-center condition">
+          <tr class="text-center condition tr-od">
             <td colspan="2"><strong>&lt;</strong> 5 Years Deaths</td>
             <td colspan="2"><strong>&ge;</strong> 5 Years Deaths</td>
           </tr>
@@ -443,6 +475,7 @@
         </tfoot>
       </table>
     </div>
+    <!-- for desktop -->
     <div class="col-12 d-none d-lg-block">
       <div class="table-responsive">
         <table
@@ -490,6 +523,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Case &lt; 5, M"
                   matTooltipClass="bg-primary"
                   [(ngModel)]="que.case.lessThen5.male"
@@ -504,6 +538,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Case &lt; 5, F"
                   matTooltipClass="bg-danger"
                   [(ngModel)]="que.case.lessThen5.female"
@@ -518,6 +553,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Case &ge; 5, M"
                   matTooltipClass="bg-primary"
                   [(ngModel)]="que.case.greaterThen5.male"
@@ -534,6 +570,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Case &ge; 5 - F"
                   matTooltipClass="bg-danger"
                   [(ngModel)]="que.case.greaterThen5.female"
@@ -549,6 +586,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Death &lt; 5 - M"
                   matTooltipClass="bg-primary"
                   [(ngModel)]="que.death.lessThen5.male"
@@ -564,6 +602,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Death &lt; 5 - F"
                   matTooltipClass="bg-danger"
                   [(ngModel)]="que.death.lessThen5.female"
@@ -579,6 +618,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Death &ge; 5 - M"
                   matTooltipClass="bg-primary"
                   [(ngModel)]="que.death.greaterThen5.male"
@@ -596,6 +636,7 @@
                 <input
                   *ngIf="isEdit"
                   type="number"
+                  min="0"
                   matTooltip="Death &ge; 5 - F"
                   matTooltipClass="bg-danger"
                   [(ngModel)]="que.death.greaterThen5.female"
@@ -624,6 +665,7 @@
         </table>
       </div>
     </div>
+
     <div class="col-12 col-lg-6 mt-4">
       <table class="table table-striped table-bordered">
         <thead>
@@ -643,6 +685,7 @@
               <input
                 *ngIf="isEdit"
                 type="number"
+                min="0"
                 [(ngModel)]="testData['tests']"
                 class="form-control input-m-f"
               />
@@ -654,6 +697,7 @@
               <input
                 *ngIf="isEdit"
                 type="number"
+                min="0"
                 [(ngModel)]="testData['positive']"
                 class="form-control input-m-f"
               />

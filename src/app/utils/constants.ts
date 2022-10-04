@@ -235,32 +235,32 @@ export const QUESTIONS = [
       },
     },
   },
+  // {
+  //   qId: 7,
+  //   q: 'Suspected Dengue Fever',
+  //   case: {
+  //     lessThen5: {
+  //       male: 0,
+  //       female: 0,
+  //     },
+  //     greaterThen5: {
+  //       male: 0,
+  //       female: 0,
+  //     },
+  //   },
+  //   death: {
+  //     lessThen5: {
+  //       male: 0,
+  //       female: 0,
+  //     },
+  //     greaterThen5: {
+  //       male: 0,
+  //       female: 0,
+  //     },
+  //   },
+  // },
   {
     qId: 7,
-    q: 'Suspected Dengue Fever',
-    case: {
-      lessThen5: {
-        male: 0,
-        female: 0,
-      },
-      greaterThen5: {
-        male: 0,
-        female: 0,
-      },
-    },
-    death: {
-      lessThen5: {
-        male: 0,
-        female: 0,
-      },
-      greaterThen5: {
-        male: 0,
-        female: 0,
-      },
-    },
-  },
-  {
-    qId: 8,
     q: 'Suspected Malaria',
     case: {
       lessThen5: {
@@ -284,7 +284,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 9,
+    qId: 8,
     q: 'Suspected Chickenpox',
     case: {
       lessThen5: {
@@ -308,7 +308,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 10,
+    qId: 9,
     q: 'Suspected Typhoid Fever',
     case: {
       lessThen5: {
@@ -332,7 +332,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 11,
+    qId: 10,
     q: 'Neonatal tetanus/Neonatal sepsis',
     case: {
       lessThen5: {
@@ -356,7 +356,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 12,
+    qId: 11,
     q: 'Acute Jaundice Syndrome (Hepatitis-A and E)',
     case: {
       lessThen5: {
@@ -380,7 +380,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 13,
+    qId: 12,
     q: 'Suspected Hemorrhagic Fever/CCHF',
     case: {
       lessThen5: {
@@ -404,7 +404,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 14,
+    qId: 13,
     q: 'Unexplained Fever > 38.5˚C (PUO)',
     case: {
       lessThen5: {
@@ -428,7 +428,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 15,
+    qId: 14,
     q: 'Skin Disease/Scabies',
     case: {
       lessThen5: {
@@ -452,7 +452,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 16,
+    qId: 15,
     q: 'Cutaneous Leishmaniasis',
     case: {
       lessThen5: {
@@ -476,7 +476,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 17,
+    qId: 16,
     q: 'Acute Malnutrition',
     case: {
       lessThen5: {
@@ -500,7 +500,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 18,
+    qId: 17,
     q: 'Eye Infection',
     case: {
       lessThen5: {
@@ -524,7 +524,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 19,
+    qId: 18,
     q: 'Impetigo',
     case: {
       lessThen5: {
@@ -548,7 +548,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 20,
+    qId: 19,
     q: 'Dog Bite/Snake Bite',
     case: {
       lessThen5: {
@@ -572,7 +572,7 @@ export const QUESTIONS = [
     },
   },
   {
-    qId: 21,
+    qId: 20,
     q: 'Others',
     case: {
       lessThen5: {

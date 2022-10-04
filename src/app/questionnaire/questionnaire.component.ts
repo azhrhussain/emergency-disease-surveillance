@@ -103,11 +103,11 @@ export class QuestionnaireComponent implements OnInit {
   today: string = new Date().toLocaleDateString('en-ZA');
   isEdit: boolean = false;
   canEdit: boolean = false;
-  isAddNew: boolean=false;
-  togelEdit=()=>{
+  isAddNew: boolean = false;
+  togelEdit = () => {
     this.isAddNew = !this.isAddNew;
     this.isEdit = !this.isEdit;
-  }
+  };
   hypothisis: any = {
     submittedBy: this.selectedUser,
     reportingDate: this.today,
@@ -127,6 +127,7 @@ export class QuestionnaireComponent implements OnInit {
   questionSumData: { [key: string]: any } = getTotalSum(this.questions);
 
   onChangeCase($event: any, type: string, campare: any, gender: any) {
+    console.log('questionSumData[type][campare][gender] ',this.questionSumData[type][campare][gender] )
     this.questionSumData[type][campare][gender] = sumOfQuestion(
       this.questions,
       type,
@@ -174,14 +175,20 @@ export class QuestionnaireComponent implements OnInit {
   //     .subscribe((response) => console.log('response:', response));
   // }
   todaysRawData: any;
-  excelReportJSON: any =[];
-  reportDataForExcelJson: any ={};
+  excelReportJSON: any = [];
+  reportDataForExcelJson: any = {};
   isReportGeneratedForExport: boolean = false;
 
   export() {
-    const fileName = this.reportDataForExcelJson.hypothisis.submittedBy === 'admin'?'Main': this.reportDataForExcelJson.hypothisis.submittedBy;
+    const fileName =
+      this.reportDataForExcelJson.hypothisis.submittedBy === 'admin'
+        ? 'Main'
+        : this.reportDataForExcelJson.hypothisis.submittedBy;
     const exportFileTitle = `${fileName} [${this.reportDataForExcelJson.hypothisis.reportingDate}] EDSS Report`;
-    this.exportService.exportExcel(this.reportDataForExcelJson, exportFileTitle);
+    this.exportService.exportExcel(
+      this.reportDataForExcelJson,
+      exportFileTitle
+    );
   }
   handleShowTodayData() {
     //api endpoint
@@ -204,7 +211,7 @@ export class QuestionnaireComponent implements OnInit {
               this.questions = questionsData;
               this.rapidAntigenTest = rapidAntigenTestData;
               this.hypothisis.submittedBy = this.selectedUser;
-              this.isReportGeneratedForExport=true;
+              this.isReportGeneratedForExport = true;
             } else {
               const user =
                 this.selectedUser === this.hypothisis.submittedBy
@@ -216,23 +223,22 @@ export class QuestionnaireComponent implements OnInit {
                 this.hypothisis = hypothisis;
                 this.questions = queestionsData;
                 this.rapidAntigenTest = rapidAntigenTest;
-                this.isReportGeneratedForExport=true;
+                this.isReportGeneratedForExport = true;
               } else {
                 alert('Opps!!! No record found for selected user.');
               }
             }
             this.questionSumData = getTotalSum(this.questions);
             this.reportDataForExcelJson = {
-              hypothisis:this.hypothisis,
+              hypothisis: this.hypothisis,
               queestionsData: this.questions,
               questionSumData: this.questionSumData,
-              rapidAntigenTest: this.rapidAntigenTest
-            }
+              rapidAntigenTest: this.rapidAntigenTest,
+            };
 
-            
-            this.canEdit= true;
-            this.isAddNew= false;
-            this.isEdit= false;
+            this.canEdit = true;
+            this.isAddNew = false;
+            this.isEdit = false;
           }
         } else {
           alert(
@@ -282,8 +288,8 @@ export class QuestionnaireComponent implements OnInit {
     )
       .then(() => {
         // Data saved successfully!
-        this.isEdit= false;
-        this.isAddNew= false;
+        this.isEdit = false;
+        this.isAddNew = false;
         alert('Data Submitted Successfuly...!\n\nHave a good day! :)');
       })
       .catch((error) => {
